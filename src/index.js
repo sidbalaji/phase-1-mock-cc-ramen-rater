@@ -1,7 +1,8 @@
+//attempt at having some changes persist but this doesnt seem to be going anywhere
 let copy_of_ramen;
 // write your code here
 fetch('http://localhost:3000/ramens')
-    .then(resp => resp.json())
+    .then(resp => resp.json()) //getting data as JSON
     .then(ramens => {ramens.forEach(renderNavBar)
                      // below line handles extra deliverable 1
                      // renders the first ramen item in the main div by default
@@ -36,12 +37,6 @@ fetch('http://localhost:3000/ramens')
     }
     )
 
-function createDeleteBtn(){
-    let deleteBtn = document.createElement('button')
-    deleteBtn.textContent = "Delete"
-    return deleteBtn
-}
-
 function renderNavBar(menuItem){
     ////////////////////////
     // This function takes care of core deliverable 1
@@ -49,13 +44,21 @@ function renderNavBar(menuItem){
     
     const imageDiv = document.querySelector('#ramen-menu')
     const img = document.createElement('img')
+    
+    // EXTRA DELIVERABLE 3 Creating and adding delete button 
+    const deleteBtn = document.createElement('button')
+    deleteBtn.textContent = "Delete"
+    
+    // adding image url to img element
     img.src = menuItem.image
     
     img.addEventListener('click',(e) => {renderRamen(menuItem)
     })
-    
+    // EXTRA DELIVERABLE 3 Removing img element and delete button when clicked
+    deleteBtn.addEventListener('click',(e)=> {img.remove()
+                                              deleteBtn.remove()})
+    imageDiv.append(deleteBtn)
     imageDiv.append(img)
-    
 }
 
 function renderRamen(menuItem){
@@ -74,5 +77,18 @@ function renderRamen(menuItem){
     mainImage.src = menuItem.image
     rating.textContent = menuItem.rating
     comment.textContent = menuItem.comment
-
+    
+    // EXTRA DELIVERABLE 2
+    // grabbing edit ramen form and changing DOM based on input values
+    // TODO logic to not edit rating and comment if input values are blank
+    const editRamenForm = document.querySelector("#edit-ramen")
+    editRamenForm.addEventListener('submit',(e)=>{e.preventDefault()
+                                                  const newRating = document.querySelector("#update-rating")
+                                                  const newComment = document.querySelector("#update-comment")
+                                                  
+                                                  comment.textContent = newComment.value
+                                                  rating.textContent = newRating.value
+                                                  newComment.value = ''
+                                                  newRating.value = ''
+                                                  })
 }
